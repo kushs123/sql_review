@@ -33,7 +33,7 @@ jobs:
 
       - name: Lint SQL files
         run: |
-          sqlfluff lint . --dialect dbt --format json > sqlfluff_report.json || true
+          sqlfluff lint . --dialect dbt --format json > sqlfluff_report.json
 
       - name: Generate PR comment
         id: generate-comment
