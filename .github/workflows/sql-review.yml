@@ -31,6 +31,9 @@ jobs:
       - name: Install Python dependencies
         run: pip install requests
 
+      - name: Check if test.sql exists
+        run: ls -l test.sql
+
       - name: Lint SQL files
         run: |
           sqlfluff lint test.sql --dialect dbt --format json > sqlfluff_report.json
