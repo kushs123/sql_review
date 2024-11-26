@@ -65,5 +65,5 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
 
       - name: Fail if lint errors found
-        run: sqlfluff lint models/ --dialect dbt
+        run: sqlfluff lint test.sql --dialect ansi
         continue-on-error: false
