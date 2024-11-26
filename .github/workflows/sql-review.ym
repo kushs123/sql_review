@@ -1,0 +1,60 @@
+name: SQL Review
+
+on:
+  pull_request:
+    paths:
+      - '*.sql'  # Adjust the path to your SQL files
+
+jobs:
+  sql-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.8'
+
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install SQLFluff
+        run: pip install sqlfluff
+
+      - name: Lint SQL files
+        run: |
+          sqlfluff lint models/ --dialect dbt --output-format json > sqlfluff_report.json
+
+      - name: Generate PR comment
+        id: generate-comment
+        run: |
+          echo "SQLFluff Report:" > sqlfluff_comment.md
+          echo "```json" >> sqlfluff_comment.md
+          cat sqlfluff_report.json >> sqlfluff_comment.md
+          echo "```" >> sqlfluff_comment.md
+
+      - name: Post PR comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            $(cat sqlfluff_comment.md)
+
+      - name: Post inline comments
+        run: python post_inline_comments.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+
+      - name: Fail if lint errors found
+        run: sqlfluff lint models/ --dialect dbt
+        continue-on-error: false
