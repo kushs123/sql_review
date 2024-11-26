@@ -28,6 +28,9 @@ jobs:
       - name: Install SQLFluff
         run: pip install sqlfluff
 
+      - name: Install Python dependencies
+        run: pip install requests
+
       - name: Lint SQL files
         run: |
           sqlfluff lint models/ --dialect dbt --format json > sqlfluff_report.json || true
