@@ -31,6 +31,9 @@ jobs:
       - name: Install Python dependencies
         run: pip install requests
 
+      - name: Install sqlfluff with dbt dialect
+        run: pip install sqlfluff[dbt]
+
       - name: Check if test.sql exists
         run: ls -l test.sql
 
