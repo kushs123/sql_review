@@ -10,8 +10,8 @@ with open('sqlfluff_report.json', 'r') as file:
 comments = []
 for result in report:
     for violation in result.get('violations', []):
-         line_no = violation.get('start_line_no', None)  # Default to None if the key is missing
-        if line_no is not None:  # Ensure that the line number exists
+        line_no = violation.get('start_line_no', None)
+        if line_no is not None:
             comments.append({
                 "path": result["filepath"],
                 "line": line_no,
