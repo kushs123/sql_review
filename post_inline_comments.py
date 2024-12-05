@@ -55,7 +55,7 @@ else:
 # If commit_id is fetched, proceed with adding comments
 if commit_id:
     for comment in comments:
-        url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/reviews/comments"
+        url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/comments"
         payload = {
             "body": comment["body"],
             "commit_id": commit_id,  # Use dynamically fetched commit_id
