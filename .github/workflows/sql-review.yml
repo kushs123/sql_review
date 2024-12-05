@@ -17,6 +17,9 @@ jobs:
         with:
           python-version: '3.8'
 
+      - name: Debug Token
+        run: echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+
       - name: Cache pip
         uses: actions/cache@v3
         with:
