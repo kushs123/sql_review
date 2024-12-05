@@ -31,6 +31,7 @@ commit_sha = source_branch
 
 # Fetch the latest commit ID dynamically from the PR commits
 commits_url = f"https://api.github.com/repos/{owner}/{repo}/commits/{commit_sha}/pulls"
+print(commits_url)
 headers = {
     "Authorization": f"Bearer {github_token}",
     "Accept": "application/vnd.github+json",
