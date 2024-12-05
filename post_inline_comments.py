@@ -30,7 +30,7 @@ print(f"GitHub Token: {github_token}")  # **Sensitive - Remove After Debugging**
 commit_sha = source_branch
 
 # Fetch the latest commit ID dynamically from the PR commits
-commits_url = f"https://api.github.com/repos/{repo}/commits/{commit_sha}/pulls"
+commits_url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/commits"
 print(commits_url)
 headers = {
     "Authorization": f"Bearer {github_token}",
