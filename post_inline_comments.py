@@ -33,11 +33,13 @@ commit_sha = source_branch
 commits_url = f"https://api.github.com/repos/{owner}/{repo}/commits/{commit_sha}/pulls"
 headers = {
     "Authorization": f"Bearer {github_token}",
-    "Accept": "application/vnd.github-commitcomment.raw+json"
+    "Accept": "application/vnd.github+json",
+    'X-GitHub-Api-Version': '2022-11-28'
 }
 
 # Get the latest commit from the PR commits
 response = requests.get(commits_url, headers=headers)
+print(response)
 if response.status_code == 200:
     commits = response.json()
     if commits:
