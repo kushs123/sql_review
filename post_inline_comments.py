@@ -26,6 +26,7 @@ owner = repo.split('/')[0]  # Extract the owner from the repo
 source_branch = os.getenv('GITHUB_HEAD_REF')  # Source branch of the PR
 target_branch = os.getenv('GITHUB_BASE_REF')  # Target branch of the PR
 print(source_branch,target_branch, github_token, owner, repo)
+print(f"GitHub Token: {github_token}")  # **Sensitive - Remove After Debugging**
 
 # Fetch the latest commit ID dynamically from the PR commits
 commits_url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pr_number}/commits"
