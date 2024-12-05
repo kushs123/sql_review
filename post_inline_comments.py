@@ -52,22 +52,47 @@ else:
     print(f"Error fetching commits: {response.status_code} - {response.text}")
     commit_id = None
 
-# If commit_id is fetched, proceed with adding comments
+
+# Consolidate all comments into a single comment body
 if commit_id:
+    consolidated_body = f"### SQLFluff Violations Report\n\n"
+    consolidated_body += f"#### Based on Commit ID: `{commit_id}`\n\n"
     for comment in comments:
-        url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/comments"
-        payload = {
-            "body": comment["body"],
-            "commit_id": commit_id,  # Use dynamically fetched commit_id
-            "path": comment["path"],  # Path of the file in the PR
-            "line": comment["line"],  # Line number where comment is made
-            "side": "RIGHT"  # Use LEFT or RIGHT for the diff view side
-        }
+        consolidated_body += (
+            f"- **File:** `{comment['path']}`\n"
+            f"  - **Line:** {comment['line']}\n"
+            f"  - **Description:** {comment['body']}\n\n"
+        )
 
-        # Sending the POST request to GitHub API
-        response = requests.post(url, json=payload, headers=headers)
+    # URL to post a general comment to the pull request
+    url = f"https://api.github.com/repos/{repo}/issues/{pr_number}/comments"
+    payload = {"body": consolidated_body}
 
-        if response.status_code == 201:
-            print(f"Comment posted successfully: {comment['body']}")
-        else:
-            print(f"Error posting comment: {response.status_code} - {response.text}")
+    # Sending the POST request to GitHub API
+    response = requests.post(url, json=payload, headers=headers)
+
+    if response.status_code == 201:
+        print("Consolidated comment posted successfully!")
+    else:
+        print(f"Error posting consolidated comment: {response.status_code} - {response.text}")
+
+
+# If commit_id is fetched, proceed with adding comments
+# if commit_id:
+#     for comment in comments:
+#         url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/comments"
+#         payload = {
+#             "body": comment["body"],
+#             "commit_id": commit_id,  # Use dynamically fetched commit_id
+#             "path": comment["path"],  # Path of the file in the PR
+#             "line": comment["line"],  # Line number where comment is made
+#             "side": "RIGHT"  # Use LEFT or RIGHT for the diff view side
+#         }
+
+#         # Sending the POST request to GitHub API
+#         response = requests.post(url, json=payload, headers=headers)
+
+#         if response.status_code == 201:
+#             print(f"Comment posted successfully: {comment['body']}")
+#         else:
+#             print(f"Error posting comment: {response.status_code} - {response.text}")
